@@ -6,8 +6,8 @@ using namespace std;
 
 struct Song { 
 	string title;
-	int time;  // could also be a string
-	int track;
+	string time;  // could also be a string
+	string track;
 };
 
 struct Album {
@@ -26,7 +26,7 @@ struct Artist {
 
 struct Music {
 	void GetString(string);
-	void Print();
+	//void Print();
 
 	set<Artist> library;
 };
