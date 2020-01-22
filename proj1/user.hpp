@@ -24,4 +24,9 @@ struct Artist {
 	int nsongs;
 };
 
-void GetString(string, set<Artist>);
+struct Music {
+	void GetString(string);
+	void Print();
+
+	set<Artist> library;
+};
