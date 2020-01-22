@@ -6,7 +6,7 @@
 #include "user.hpp"
 using namespace std;
 
-void GetString(string str){
+void Music::GetString(string str){
 //	Artist tArtist;
 //	Album tAlbum;
 //	Song tSong;
