@@ -23,3 +23,5 @@ struct Artist {
 	int time;
 	int nsongs;
 };
+
+void GetString(string, set<Artist>);
