@@ -11,7 +11,7 @@ struct Song {
 };
 
 struct Album {
-	map <int, Song > songs;
+	map <string, Song > songs;
 	string name;
 	int time;
 	int nsongs;  // optional variable but makes it easier
@@ -26,7 +26,8 @@ struct Artist {
 
 struct Music {
 	void GetString(string);
-	//void Print();
+	void FillInfo();
+	void Print();
 
-	set<Artist> library;
+	multimap<string,Artist> library;
 };
