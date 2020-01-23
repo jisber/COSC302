@@ -1,6 +1,7 @@
-//Jacob Isber and Dani Shekoury
+//Jacob Isber and Dani Shekoury 1/23/20
 //Project 1
 //Revision 1.0
+//This program reads in a file and sorts the information in the correct format. Specifically Artist, Albums, and Songs. 
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -8,8 +9,6 @@
 #include <cstdlib>
 #include "user.hpp"
 #include <sstream>
-
- 
 
 using namespace std;
 
@@ -38,6 +37,7 @@ int main(int argc, char* argv[]) {
 	return 0;
 }
 
+//This function will take the information and store it into each indiviual struct
 void Music::GetString(string temp) {
 
 	istringstream str(temp);
@@ -52,11 +52,12 @@ void Music::GetString(string temp) {
 	int track;
 	int counter = 0;
 
+//removes the underscore as well as store information into the struct
 	do{
 		string word;
 		str >> word;
 
-		for(size_t i = 0; i < word.size(); i++){
+		for(size_t i = 0; i < word.size(); i++){ 
 			if(word[i] == '_')
 				word[i] = ' ';
 		}
@@ -69,12 +70,11 @@ void Music::GetString(string temp) {
 			stringstream ss(word);
 			ss >> track;
 		}
-		
-		
 
 		counter++;
 	}while(str);
-	
+
+//Lines 76 - 101 access's the Artist/Album/Songs and store them in their areas
 	it = library.find(tArtist.name);
 	if(it == library.end()) {
 		library.insert(pair<string,Artist>(tArtist.name, tArtist));
@@ -101,31 +101,10 @@ void Music::GetString(string temp) {
 	its->second.time = convert_time(time);
 	its->second.track = track;
 		
-/*	
-	for(it = library.begin(); it != library.end(); it++) {
-		cout << "First: " << it->first << endl;
-		for(ita = it->second.albums.begin(); ita != it->second.albums.end(); ita++) {
-			cout << "Second: \t" << ita->first << endl;
-			for(its = ita->second.songs.begin(); its != ita->second.songs.end(); its++) {
-				cout << "Third: \t\t" << its->first << endl;
-			}
-		}
-	}
-
-
-	
-		for(it = library.begin(); it != library.end(); ++it) {
-		cout << "First: " << it->first << endl;// "Second: " << it->second << endl;
-	//	cout << tc << endl;
-	//	tc++;
-	}
-	*/
-	
-	
-
 	return;
 }
 
+//This function fills what information we couldnt fill in the previous function as well as computes
 void Music::FillInfo(){
 	multimap<string,Artist>::iterator it;
 	multimap<string,Album>::iterator ita;
@@ -153,7 +132,7 @@ void Music::FillInfo(){
 
 
 }
-
+//This just prints in the correct format
 void Music::Print(){
 	multimap<string,Artist>::iterator it;
 	multimap<string,Album>::iterator ita;
@@ -170,7 +149,7 @@ void Music::Print(){
 	}
 }
 
-
+//Converts time. We sourced this method from stackoverflow then tweaked to be used in our program
 int convert_time(string str) {
 	stringstream ss(str);
 	string hh,mm;
@@ -186,6 +165,7 @@ int convert_time(string str) {
 	return minutes;
 }
 
+//This function converts time back to the original string format
 string convert_time_back(int time){
 	string str, hh, mm;
 	int h, m;
