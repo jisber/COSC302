@@ -6,7 +6,7 @@ using namespace std;
 
 struct Song { 
 	string title;
-	string time;  // could also be a string
+	int time;  // could also be a string
 	string track;
 };
 
@@ -31,3 +31,7 @@ struct Music {
 
 	multimap<string,Artist> library;
 };
+
+int convert_time(string);
+
+string convert_time_back(int);
