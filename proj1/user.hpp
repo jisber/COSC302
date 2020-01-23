@@ -7,11 +7,11 @@ using namespace std;
 struct Song { 
 	string title;
 	int time;  // could also be a string
-	string track;
+	int track;
 };
 
 struct Album {
-	map <string, Song > songs;
+	map <int, Song > songs;
 	string name;
 	int time;
 	int nsongs;  // optional variable but makes it easier

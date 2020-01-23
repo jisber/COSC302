@@ -25,13 +25,10 @@ int main(int argc, char* argv[]) {
 	fin.open(argv[1]);
 	if(fin.fail()) cout << "Could not open file" << endl;
 	
-	int tc= 0;
 	while(getline(fin, line)) { //Reads in each line from the text file.
 		
 		libr.GetString(line);
 		
-	//	for(int i = 0; i < line.size(); i++) if(line[i] == '_') line[i] = ' ';	//Converts all "_" to a " " in a text file.
-			
 	}
 	
 	libr.FillInfo();
@@ -48,19 +45,18 @@ void Music::GetString(string temp) {
 	Artist tArtist;
 	Album tAlbum;
 	string time;
-//	Music libr;
-	bool found = 0;
 	multimap<string,Artist>::iterator it;
 	multimap<string,Album>::iterator ita;
-	multimap<string,Song>::iterator its;
+	multimap<int,Song>::iterator its;
 
+	int track;
 	int counter = 0;
 
 	do{
 		string word;
 		str >> word;
 
-		for(int i = 0; i < word.size(); i++){
+		for(size_t i = 0; i < word.size(); i++){
 			if(word[i] == '_')
 				word[i] = ' ';
 		}
@@ -69,14 +65,16 @@ void Music::GetString(string temp) {
 		else if(counter == 1) time = word;
 		else if(counter == 2) tArtist.name = word;
 		else if(counter == 3) tAlbum.name = word;
-		else if(counter == 5) tSong.track = word;
+		else if(counter == 5){ 
+			stringstream ss(word);
+			ss >> track;
+		}
 		
 		
 
 		counter++;
 	}while(str);
 	
-
 	it = library.find(tArtist.name);
 	if(it == library.end()) {
 		library.insert(pair<string,Artist>(tArtist.name, tArtist));
@@ -95,13 +93,13 @@ void Music::GetString(string temp) {
 
 	its = ita->second.songs.find(tSong.track);
 	if(its == ita->second.songs.end()){
-		ita->second.songs.insert(pair<string,Song>(tSong.track, tSong));
+		ita->second.songs.insert(pair<int,Song>(track, tSong));
 	}
 
-	its = ita->second.songs.find(tSong.track);
+	its = ita->second.songs.find(track);
 	its->second.title = tSong.title;
 	its->second.time = convert_time(time);
-	its->second.track = tSong.track;
+	its->second.track = track;
 		
 /*	
 	for(it = library.begin(); it != library.end(); it++) {
@@ -131,7 +129,7 @@ void Music::GetString(string temp) {
 void Music::FillInfo(){
 	multimap<string,Artist>::iterator it;
 	multimap<string,Album>::iterator ita;
-	multimap<string,Song>::iterator its;
+	multimap<int,Song>::iterator its;
 	int sTime = 0;
 	int aTime = 0;
 	int nSong = 0;
@@ -159,14 +157,14 @@ void Music::FillInfo(){
 void Music::Print(){
 	multimap<string,Artist>::iterator it;
 	multimap<string,Album>::iterator ita;
-	multimap<string,Song>::iterator its;
+	multimap<int,Song>::iterator its;
 
 	for(it = library.begin(); it != library.end(); it++){
 		printf("%s: %d, %s\n", it->second.name.c_str(), it->second.nsongs, convert_time_back(it->second.time).c_str());
 		for(ita = it->second.albums.begin(); ita != it->second.albums.end(); ita++) {
-			printf("\t%s: %d, %s\n", ita->second.name.c_str(), ita->second.nsongs, convert_time_back(ita->second.time).c_str());
+			printf("        %s: %d, %s\n", ita->second.name.c_str(), ita->second.nsongs, convert_time_back(ita->second.time).c_str());
 			for(its = ita->second.songs.begin(); its != ita->second.songs.end(); its++) {
-				printf("\t\t%s. %s: %s\n", its->second.track.c_str(), its->second.title.c_str(), convert_time_back(its->second.time).c_str());
+				printf("                %d. %s: %s\n", its->second.track, its->second.title.c_str(), convert_time_back(its->second.time).c_str());
 			}
 		}
 	}
@@ -200,8 +198,11 @@ string convert_time_back(int time){
 
 	ssh << h;
 	ssm << m;
-
-	str = ssh.str() + ":" + ssm.str();
+	
+	if(m < 10)
+		str = ssh.str() + ":0" + ssm.str();
+	else
+		str = ssh.str() + ":" + ssm.str();
 
 	return str;
 }
